@@ -4,7 +4,7 @@ import { parse } from 'mathjs'
 import { PropsCustom, PropsEquations } from '../interfaces/service'
 
 
-export default class Equations extends Component<PropsCustom> {
+export default class Equations extends Component<PropsCustom,PropsEquations> {
     constructor(props:PropsCustom){
         super(props);
     }

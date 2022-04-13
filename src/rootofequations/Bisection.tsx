@@ -1,10 +1,12 @@
 import { row } from 'mathjs';
-import { useState,FC,ChangeEvent } from 'react'
+import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
 import { NavBar } from '../components/NavBar'
 import { DataTable, PropsCustom, PropsEquations } from '../interfaces/service';
 import './css/Bisection.css'
 import Equations from './Equations';
 
+import {TextField, Button, Table, TableBody, TableCell, TableContainer,
+  TableHead, TableRow, Paper} from '@mui/material';
 
 export default class Bisection extends Equations {
 
@@ -12,9 +14,10 @@ export default class Bisection extends Equations {
     super(props);
     this.state = {
       Epsilon: props.Epsilon,
-      Equations: props.Equation,
+      Equation: props.Equation,
       Error: props.Error,
-      Method: props.Method
+      Method: props.Method,
+      Data: [{}]
     };
     this.xLChange = this.xLChange.bind(this);
     this.xRChange = this.xRChange.bind(this);
@@ -23,7 +26,6 @@ export default class Bisection extends Equations {
     this.handleSubmit = this.handleSubmit.bind(this);
 
   }
-
 
   calcXm(xL:number,xR:number){
     return (xL+xR)/2;
@@ -44,14 +46,14 @@ export default class Bisection extends Equations {
     listxM.push(JSON.parse(xM.toFixed(6)));
     listerror.push(JSON.parse(error.toFixed(6)));
 
-    while(error > epsilon && listerror.length < 100){
+    while(error > epsilon){
       xM = this.calcXm(xL,xR);
       if((this.function(xL, equation) * this.function(xR, equation)) < 0){
         error = this.error(xM,xL);
         xL = xM;
       }
       else{
-        error = this.error(xR,xR);
+        error = this.error(xM,xR);
         xR = xM;
       }
       listxL.push(JSON.parse(xL.toFixed(6)));
@@ -86,7 +88,7 @@ export default class Bisection extends Equations {
       this.setState({Epsilon:JSON.parse(event.target.value)});
   }
 
-  handleSubmit (event:ChangeEvent<HTMLInputElement>) {
+  handleSubmit(event:FormEvent<HTMLFormElement>) {
     event.preventDefault();
     let Result:any = this.calc(
       this.state.Method.RootEquations.Bisection.xL,
@@ -96,15 +98,15 @@ export default class Bisection extends Equations {
       this.state.Equation
   );
   let row:Array<DataTable> = []
-  for(let i:number = 0 ; i<Result.listError.length ; ++i){
+  for(let i:number = 0 ; i<Result.listerror.length ; ++i){
       row.push({
           Bisection:{
               xL:Result.listxL[i],
               xR:Result.listxR[i],
               xM:Result.listxM[i],
-              FxL:JSON.parse(this.function(Result.listxL[i],this.state.Equations).toFixed(6)),
-              FxR:JSON.parse(this.function(Result.listxR[i],this.state.Equations).toFixed(6)),
-              FxM:JSON.parse(this.function(Result.listxM[i],this.state.Equations).toFixed(6)),
+              FxL:JSON.parse(this.function(Result.listxL[i],this.state.Equation).toFixed(6)),
+              FxR:JSON.parse(this.function(Result.listxR[i],this.state.Equation).toFixed(6)),
+              FxM:JSON.parse(this.function(Result.listxM[i],this.state.Equation).toFixed(6)),
               Error:Result.listerror[i]
           }
       });
@@ -120,32 +122,49 @@ export default class Bisection extends Equations {
             <div className="headbisection">
               <h1>BISECTION</h1>
             </div>
-            <div className="myform">
+            <div className="headbisection">
               <form onSubmit={this.handleSubmit}>
-                <div>
-                  <label> 
-                    Equation: &nbsp; 
-                    <input type="text" onChange={this.equationChange} />
-                    {/* <input type="text"  /> */}
-                  </label>
+                <div className="myform">
+                  <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                 </div>
                 <div>
-                  <label> 
-                    xL: &nbsp; 
-                    <input type="text" />
-                  </label>
-                </div>
-                <div>
-                  <label> 
-                  xR: &nbsp; 
-                  <input type="text"  />
-                  </label>
-                </div>
-                  <input type="submit" />
+                  <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>
+                </div>    
               </form>
-              
             </div>
-          </div>
+            <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Iteration</TableCell>
+                    <TableCell align="right">xL</TableCell>
+                    <TableCell align="right">xR</TableCell>
+                    <TableCell align="right">xM</TableCell>
+                    <TableCell align="right">Error</TableCell>
+                  </TableRow>
+                </TableHead>
+              <TableBody>
+                {this.state.Data.map((row,index) => (
+                  <TableRow
+                    key={index}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                  <TableCell component="th" scope="row">
+                    {index}
+                  </TableCell>
+                  <TableCell align="right">{row.Bisection?.xL}</TableCell>
+                  <TableCell align="right">{row.Bisection?.xR}</TableCell>
+                  <TableCell align="right">{row.Bisection?.xM}</TableCell>
+                  <TableCell align="right">{row.Bisection?.Error}</TableCell>
+              </TableRow>
+        ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
      )     
   }
  
