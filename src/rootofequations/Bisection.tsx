@@ -1,4 +1,3 @@
-import { row } from 'mathjs';
 import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
 import { NavBar } from '../components/NavBar'
 import { DataTable, PropsCustom, PropsEquations } from '../interfaces/service';
@@ -7,6 +6,7 @@ import Equations from './Equations';
 
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper} from '@mui/material';
+import Tex2SVG from "react-hook-mathjax";
 
 export default class Bisection extends Equations {
 
@@ -33,6 +33,7 @@ export default class Bisection extends Equations {
 
   calc(xL:number,xR:number,error:number,epsilon:number,equation:string):object{
     let xM:number = this.calcXm(xL,xR),
+      // เก็บข้อมูลในรูปแบบ Array
       listxL: Array<number> = [],
       listxR: Array<number> = [],
       listxM: Array<number> = [],
@@ -40,15 +41,14 @@ export default class Bisection extends Equations {
 
     // คำนวณค่า Error
     error = (this.function(xL, equation) * this.function(xR, equation)) ? this.error(xM, xL) : this.error(xM, xR);
-    
-    listxL.push(JSON.parse(xL.toFixed(6)));
-    listxR.push(JSON.parse(xR.toFixed(6)));
-    listxM.push(JSON.parse(xM.toFixed(6)));
-    listerror.push(JSON.parse(error.toFixed(6)));
 
+    // loop คำนวณ bisection
     while(error > epsilon){
       xM = this.calcXm(xL,xR);
-      if((this.function(xL, equation) * this.function(xR, equation)) < 0){
+      listxL.push(JSON.parse(xL.toFixed(6)));
+      listxR.push(JSON.parse(xR.toFixed(6)));
+      listxM.push(JSON.parse(xM.toFixed(6)));
+      if((this.function(xM, equation) * this.function(xR, equation)) < 0){
         error = this.error(xM,xL);
         xL = xM;
       }
@@ -56,11 +56,7 @@ export default class Bisection extends Equations {
         error = this.error(xM,xR);
         xR = xM;
       }
-      listxL.push(JSON.parse(xL.toFixed(6)));
-      listxR.push(JSON.parse(xR.toFixed(6)));
-      listxM.push(JSON.parse(xM.toFixed(6)));
       listerror.push(JSON.parse(error.toFixed(6)));
-
     }
     return({
       listxL:listxL,
@@ -73,6 +69,7 @@ export default class Bisection extends Equations {
 
   }
 
+  //เก็บ value ลง Method Bisection
   xLChange(event:ChangeEvent<HTMLInputElement>){
     this.props.Method.RootEquations.Bisection.xL = JSON.parse(event.target.value) ;
     this.setState({Method: this.props.Method});
@@ -97,6 +94,7 @@ export default class Bisection extends Equations {
       this.state.Epsilon,
       this.state.Equation
   );
+  //loop แสดงค่าแต่ละตัวแปร ลงใน row แล้วนำไปแสดงใน DataTable
   let row:Array<DataTable> = []
   for(let i:number = 0 ; i<Result.listerror.length ; ++i){
       row.push({
@@ -122,20 +120,25 @@ export default class Bisection extends Equations {
             <div className="headbisection">
               <h1>BISECTION</h1>
             </div>
+            <div className="setequation">
+              Equation : <Tex2SVG display="inline" latex={this.state.Equation} />
+            </div>
             <div className="headbisection">
               <form onSubmit={this.handleSubmit}>
                 <div className="myform">
                   <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} value={this.state.Method.RootEquations.Bisection.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} value={this.state.Method.RootEquations.Bisection.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} value={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                 </div>
                 <div>
                   <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>
                 </div>    
               </form>
             </div>
-            <TableContainer component={Paper}>
+            <br></br>
+            <div>
+              <TableContainer component={Paper}>
               <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
                 <TableHead>
                   <TableRow>
@@ -160,10 +163,12 @@ export default class Bisection extends Equations {
                   <TableCell align="right">{row.Bisection?.xM}</TableCell>
                   <TableCell align="right">{row.Bisection?.Error}</TableCell>
               </TableRow>
-        ))}
+              ))}
               </TableBody>
             </Table>
           </TableContainer>
+            </div>
+            
         </div>
      )     
   }

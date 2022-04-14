@@ -8,7 +8,7 @@ export const Home = () => {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>Numer Project ReactJS</p>
+        <p>Numer Project React TS</p>
         <p>By 6204062620038 วนัชพร เชื้อวิวัฒน์</p>
         <form>
               <Card.Link href="/rootofequations">

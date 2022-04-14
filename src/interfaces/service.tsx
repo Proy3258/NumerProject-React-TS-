@@ -2,12 +2,15 @@ export interface Bisection {
     xL:number;
     xR:number;
 };
+export interface FalsePosition{
+    xL:number;
+    xR:number;
+};
 export interface PropsEquations{
     Epsilon:number;
     Equation:string;
     Error:number;
     Method:Method;
-    Result?:Result;
     Data:Array<DataTable>;
 };
 export interface PropsCustom{
@@ -19,6 +22,7 @@ export interface PropsCustom{
 export interface Method{
     RootEquations:{
         Bisection:Bisection;
+        FalsePosition:FalsePosition;
     }
     
 };
@@ -28,9 +32,10 @@ export interface Result {
     Error:Array<number>;
 }
 export interface DataTable {
-    Bisection?:DataBisection;
+    Bisection?:DataResult;
+    FalsePosition?:DataResult;
 };
-export interface DataBisection{
+export interface DataResult{
     xL:number;
     xR:number;
     xM:number;

@@ -4,6 +4,7 @@ import './App.css';
 import { Home } from './pages/Home'
 import { RootOfEq } from './rootofequations/RootOfEq'
 import  Bisection from './rootofequations/Bisection'
+import FalsePosition from './rootofequations/FalsePosition';
  
 function App() {
   return (
@@ -15,12 +16,28 @@ function App() {
           <Route path="/bisection" element=
           {<Bisection 
             Epsilon={Math.pow(10,-6)}
-            Equation={"x"}
+            Equation={""}
             Error={0}
             Method={
               {
                 RootEquations:{
-                  Bisection:{xL:1.75,xR:2.00}
+                  Bisection:{xL:1.75,xR:2.00},
+                  FalsePosition:{xL:0.02,xR:0.03}
+                }
+              }
+
+            }
+
+          />} />
+          <Route path="/falseposition" element={<FalsePosition
+            Epsilon={Math.pow(10,-6)}
+            Equation={""}
+            Error={0}
+            Method={
+              {
+                RootEquations:{
+                  Bisection:{xL:1.75,xR:2.00},
+                  FalsePosition:{xL:0.02,xR:0.03}
                 }
               }
 
