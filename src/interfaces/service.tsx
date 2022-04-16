@@ -32,10 +32,6 @@ export interface Result {
     Error:Array<number>;
 }
 export interface DataTable {
-    Bisection?:DataResult;
-    FalsePosition?:DataResult;
-};
-export interface DataResult{
     xL:number;
     xR:number;
     xM:number;
@@ -44,3 +40,6 @@ export interface DataResult{
     FxM:number;
     Error:number;
 };
+export interface DesmosProps{
+    Equation?:string;
+}

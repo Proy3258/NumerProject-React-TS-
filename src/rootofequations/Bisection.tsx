@@ -7,6 +7,8 @@ import Equations from './Equations';
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
+import { DesmosChart } from '../components/DesmosChart';
+
 
 export default class Bisection extends Equations {
 
@@ -17,14 +19,13 @@ export default class Bisection extends Equations {
       Equation: props.Equation,
       Error: props.Error,
       Method: props.Method,
-      Data: [{}]
+      Data: []
     };
     this.xLChange = this.xLChange.bind(this);
     this.xRChange = this.xRChange.bind(this);
     this.equationChange = this.equationChange.bind(this);
     this.epsilonChange = this.epsilonChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-
   }
 
   calcXm(xL:number,xR:number){
@@ -98,15 +99,14 @@ export default class Bisection extends Equations {
   let row:Array<DataTable> = []
   for(let i:number = 0 ; i<Result.listerror.length ; ++i){
       row.push({
-          Bisection:{
-              xL:Result.listxL[i],
-              xR:Result.listxR[i],
-              xM:Result.listxM[i],
-              FxL:JSON.parse(this.function(Result.listxL[i],this.state.Equation).toFixed(6)),
-              FxR:JSON.parse(this.function(Result.listxR[i],this.state.Equation).toFixed(6)),
-              FxM:JSON.parse(this.function(Result.listxM[i],this.state.Equation).toFixed(6)),
-              Error:Result.listerror[i]
-          }
+            xL:Result.listxL[i],
+            xR:Result.listxR[i],
+            xM:Result.listxM[i],
+            FxL:JSON.parse(this.function(Result.listxL[i],this.state.Equation).toFixed(6)),
+            FxR:JSON.parse(this.function(Result.listxR[i],this.state.Equation).toFixed(6)),
+            FxM:JSON.parse(this.function(Result.listxM[i],this.state.Equation).toFixed(6)),
+            Error:Result.listerror[i]
+          
       });
       this.setState({
         Data:row
@@ -120,9 +120,6 @@ export default class Bisection extends Equations {
             <div className="headbisection">
               <h1>BISECTION</h1>
             </div>
-            <div className="setequation">
-              Equation : <Tex2SVG display="inline" latex={this.state.Equation} />
-            </div>
             <div className="headbisection">
               <form onSubmit={this.handleSubmit}>
                 <div className="myform">
@@ -135,6 +132,14 @@ export default class Bisection extends Equations {
                   <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>
                 </div>    
               </form>
+            </div>
+            <br></br>
+            <div className="setequation">
+                  Equation : <Tex2SVG display="inline" latex={this.state.Equation} />
+            </div>
+            <br></br>
+            <div>
+              <DesmosChart Equation={this.state.Equation}></DesmosChart>
             </div>
             <br></br>
             <div>
@@ -158,10 +163,10 @@ export default class Bisection extends Equations {
                   <TableCell component="th" scope="row">
                     {index}
                   </TableCell>
-                  <TableCell align="right">{row.Bisection?.xL}</TableCell>
-                  <TableCell align="right">{row.Bisection?.xR}</TableCell>
-                  <TableCell align="right">{row.Bisection?.xM}</TableCell>
-                  <TableCell align="right">{row.Bisection?.Error}</TableCell>
+                  <TableCell align="right">{row.xL}</TableCell>
+                  <TableCell align="right">{row.xR}</TableCell>
+                  <TableCell align="right">{row.xM}</TableCell>
+                  <TableCell align="right">{row.Error}</TableCell>
               </TableRow>
               ))}
               </TableBody>

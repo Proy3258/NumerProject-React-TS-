@@ -8,6 +8,7 @@ import Equations from './Equations';
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
+import { DesmosChart } from '../components/DesmosChart';
 
 
 
@@ -20,7 +21,7 @@ export default class FalsePosition extends Equations {
           Equation: props.Equation,
           Error: props.Error,
           Method: props.Method,
-          Data: [{}]
+          Data: []
         };
         this.xLChange = this.xLChange.bind(this);
         this.xRChange = this.xRChange.bind(this);
@@ -101,15 +102,13 @@ export default class FalsePosition extends Equations {
       let row:Array<DataTable> = []
       for(let i:number = 0 ; i<Result.listerror.length ; ++i){
           row.push({
-              FalsePosition:{
-                  xL:Result.listxL[i],
-                  xR:Result.listxR[i],
-                  xM:Result.listx1[i],
-                  FxL:JSON.parse(this.function(Result.listxL[i],this.state.Equation).toFixed(6)),
-                  FxR:JSON.parse(this.function(Result.listxR[i],this.state.Equation).toFixed(6)),
-                  FxM:JSON.parse(this.function(Result.listx1[i],this.state.Equation).toFixed(6)),
-                  Error:Result.listerror[i]
-              }
+              xL:Result.listxL[i],
+              xR:Result.listxR[i],
+              xM:Result.listx1[i],
+              FxL:JSON.parse(this.function(Result.listxL[i],this.state.Equation).toFixed(6)),
+              FxR:JSON.parse(this.function(Result.listxR[i],this.state.Equation).toFixed(6)),
+              FxM:JSON.parse(this.function(Result.listx1[i],this.state.Equation).toFixed(6)),
+              Error:Result.listerror[i] 
           });
           this.setState({
             Data:row
@@ -123,9 +122,6 @@ export default class FalsePosition extends Equations {
                 <div className="headfalseposition">
                   <h1>FALSE POSITION</h1>
                 </div>
-                <div className="setequation">
-                  Equation : <Tex2SVG display="inline" latex={this.state.Equation} />
-                </div>
                 <div className="headfalseposition">
                   <form onSubmit={this.handleSubmit}>
                     <div className="myform">
@@ -138,6 +134,14 @@ export default class FalsePosition extends Equations {
                       <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>
                     </div>    
                   </form>
+                </div>
+                <br></br>
+                <div className="setequation">
+                  Equation : <Tex2SVG display="inline" latex={this.state.Equation} />
+                </div>
+                <br></br>
+                <div>
+                  <DesmosChart Equation={this.state.Equation}></DesmosChart>
                 </div>
                 <br></br>
                 <div>
@@ -161,10 +165,10 @@ export default class FalsePosition extends Equations {
                       <TableCell component="th" scope="row">
                         {index}
                       </TableCell>
-                      <TableCell align="right">{row.FalsePosition?.xL}</TableCell>
-                      <TableCell align="right">{row.FalsePosition?.xR}</TableCell>
-                      <TableCell align="right">{row.FalsePosition?.xM}</TableCell>
-                      <TableCell align="right">{row.FalsePosition?.Error}</TableCell>
+                      <TableCell align="right">{row.xL}</TableCell>
+                      <TableCell align="right">{row.xR}</TableCell>
+                      <TableCell align="right">{row.xM}</TableCell>
+                      <TableCell align="right">{row.Error}</TableCell>
                   </TableRow>
                   ))}
                   </TableBody>
