@@ -12,6 +12,7 @@ export interface PropsEquations{
     Error:number;
     Method:Method;
     Data:Array<DataTable>;
+    ApexChart:ApexChartProps;
 };
 export interface PropsCustom{
     Epsilon:number;
@@ -42,4 +43,12 @@ export interface DataTable {
 };
 export interface DesmosProps{
     Equation?:string;
+}
+export interface ApexChartProps{
+    Series:Array<Series>;
+    Categories:Array<number>;
+}
+export interface Series{
+    name:string;
+    data:Array<number>;
 }

@@ -9,6 +9,7 @@ import {TextField, Button, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
 import { DesmosChart } from '../components/DesmosChart';
+import { ApexChart } from '../components/ApexChart';
 
 
 
@@ -21,7 +22,8 @@ export default class FalsePosition extends Equations {
           Equation: props.Equation,
           Error: props.Error,
           Method: props.Method,
-          Data: []
+          Data: [],
+          ApexChart: { Series: [], Categories: []}
         };
         this.xLChange = this.xLChange.bind(this);
         this.xRChange = this.xRChange.bind(this);
@@ -67,8 +69,8 @@ export default class FalsePosition extends Equations {
           listxR:listxR,
           listx1:listx1,
           listerror:listerror,
-          epsilon:epsilon,
-          equation:equation
+          Epsilon:epsilon,
+          Equation:equation
         })
     
       }
@@ -111,7 +113,16 @@ export default class FalsePosition extends Equations {
               Error:Result.listerror[i] 
           });
           this.setState({
-            Data:row
+            Data:row,
+            ApexChart: {
+              Series: [
+                  {name: "XL", data: Result.listxL},
+                  {name: "XR", data: Result.listxR},
+                  {name: "X1", data: Result.listx1},
+                  {name: "Error", data: Result.listerror}
+              ],
+              Categories: Result.listerror.count
+          }
         })
         }
       }
@@ -126,7 +137,7 @@ export default class FalsePosition extends Equations {
                   <form onSubmit={this.handleSubmit}>
                     <div className="myform">
                       <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>
-                      <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} defaultValue={this.state.Method.RootEquations.FalsePosition.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
+                      <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} value={this.state.Method.RootEquations.FalsePosition.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
                       <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} defaultValue={this.state.Method.RootEquations.FalsePosition.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
                       <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                     </div>
@@ -142,6 +153,10 @@ export default class FalsePosition extends Equations {
                 <br></br>
                 <div>
                   <DesmosChart Equation={this.state.Equation}></DesmosChart>
+                </div>
+                <br></br>
+                <div>
+                <ApexChart Series={this.state.ApexChart.Series} Categories={this.state.ApexChart.Categories}></ApexChart>
                 </div>
                 <br></br>
                 <div>

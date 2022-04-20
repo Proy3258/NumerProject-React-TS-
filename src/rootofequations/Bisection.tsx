@@ -8,6 +8,7 @@ import {TextField, Button, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
 import { DesmosChart } from '../components/DesmosChart';
+import { ApexChart } from '../components/ApexChart';
 
 
 export default class Bisection extends Equations {
@@ -19,7 +20,8 @@ export default class Bisection extends Equations {
       Equation: props.Equation,
       Error: props.Error,
       Method: props.Method,
-      Data: []
+      Data: [],
+      ApexChart: {Series: [], Categories: []}
     };
     this.xLChange = this.xLChange.bind(this);
     this.xRChange = this.xRChange.bind(this);
@@ -109,7 +111,16 @@ export default class Bisection extends Equations {
           
       });
       this.setState({
-        Data:row
+        Data:row,
+        ApexChart: {
+          Series: [
+              {name: "XL", data: Result.listxL},
+              {name: "XR", data: Result.listxR},
+              {name: "XM", data: Result.listxM},
+              {name: "Error", data: Result.listerror}
+          ],
+          Categories: Result.listerror.count
+      }
       })
     }
   }
@@ -140,6 +151,10 @@ export default class Bisection extends Equations {
             <br></br>
             <div>
               <DesmosChart Equation={this.state.Equation}></DesmosChart>
+            </div>
+            <br></br>
+            <div>
+              <ApexChart Series={this.state.ApexChart.Series} Categories={this.state.ApexChart.Categories}></ApexChart>
             </div>
             <br></br>
             <div>
