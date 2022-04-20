@@ -75,11 +75,11 @@ export default class FalsePosition extends Equations {
     
       //เก็บ value ลง Method falseposition
       xLChange(event:ChangeEvent<HTMLInputElement>){
-        this.props.Method.RootEquations.FalsePosition.xL = JSON.parse(event.target.value) ;
+        this.props.Method.RootEquations.FalsePosition.xL = JSON.parse(event.target.value);
         this.setState({Method: this.props.Method});
       }
       xRChange(event:ChangeEvent<HTMLInputElement>){
-          this.props.Method.RootEquations.FalsePosition.xR = JSON.parse(event.target.value) ;
+          this.props.Method.RootEquations.FalsePosition.xR = JSON.parse(event.target.value);
           this.setState({Method: this.props.Method});
       }
       equationChange(event:ChangeEvent<HTMLInputElement>){
@@ -126,9 +126,9 @@ export default class FalsePosition extends Equations {
                   <form onSubmit={this.handleSubmit}>
                     <div className="myform">
                       <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>
-                      <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} value={this.state.Method.RootEquations.FalsePosition.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
-                      <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} value={this.state.Method.RootEquations.FalsePosition.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
-                      <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} value={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
+                      <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} defaultValue={this.state.Method.RootEquations.FalsePosition.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
+                      <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} defaultValue={this.state.Method.RootEquations.FalsePosition.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
+                      <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                     </div>
                     <div>
                       <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>

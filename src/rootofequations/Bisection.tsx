@@ -64,19 +64,19 @@ export default class Bisection extends Equations {
       listxR:listxR,
       listxM:listxM,
       listerror:listerror,
-      epsilon:epsilon,
-      equation:equation
+      Epsilon:epsilon,
+      Equation:equation
     })
 
   }
 
   //เก็บ value ลง Method Bisection
   xLChange(event:ChangeEvent<HTMLInputElement>){
-    this.props.Method.RootEquations.Bisection.xL = JSON.parse(event.target.value) ;
+    this.props.Method.RootEquations.Bisection.xL = JSON.parse(event.target.value);
     this.setState({Method: this.props.Method});
   }
   xRChange(event:ChangeEvent<HTMLInputElement>){
-      this.props.Method.RootEquations.Bisection.xR = JSON.parse(event.target.value) ;
+      this.props.Method.RootEquations.Bisection.xR = JSON.parse(event.target.value);
       this.setState({Method: this.props.Method});
   }
   equationChange(event:ChangeEvent<HTMLInputElement>){
@@ -110,7 +110,7 @@ export default class Bisection extends Equations {
       });
       this.setState({
         Data:row
-    })
+      })
     }
   }
   render(){
@@ -124,9 +124,9 @@ export default class Bisection extends Equations {
               <form onSubmit={this.handleSubmit}>
                 <div className="myform">
                   <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} value={this.state.Method.RootEquations.Bisection.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} value={this.state.Method.RootEquations.Bisection.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} value={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} defaultValue={this.state.Method.RootEquations.Bisection.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} defaultValue={this.state.Method.RootEquations.Bisection.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                 </div>
                 <div>
                   <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>
