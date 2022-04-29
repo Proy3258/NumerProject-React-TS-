@@ -21,7 +21,8 @@ export default class Bisection extends Equations {
       Error: props.Error,
       Method: props.Method,
       Data: [],
-      ApexChart: {Series: [], Categories: []}
+      ApexChart: {Series: [], Categories: []},
+      Answer:[]
     };
     this.xLChange = this.xLChange.bind(this);
     this.xRChange = this.xRChange.bind(this);
@@ -45,6 +46,9 @@ export default class Bisection extends Equations {
     // คำนวณค่า Error
     error = (this.function(xL, equation) * this.function(xR, equation)) ? this.error(xM, xL) : this.error(xM, xR);
 
+    // if(error == Infinity){
+    //   console.log(error);
+    // }
     // loop คำนวณ bisection
     while(error > epsilon){
       xM = this.calcXm(xL,xR);
@@ -76,10 +80,12 @@ export default class Bisection extends Equations {
   xLChange(event:ChangeEvent<HTMLInputElement>){
     this.props.Method.RootEquations.Bisection.xL = JSON.parse(event.target.value);
     this.setState({Method: this.props.Method});
+    console.log(JSON.parse(event.target.value));
   }
   xRChange(event:ChangeEvent<HTMLInputElement>){
       this.props.Method.RootEquations.Bisection.xR = JSON.parse(event.target.value);
       this.setState({Method: this.props.Method});
+      console.log(JSON.parse(event.target.value));
   }
   equationChange(event:ChangeEvent<HTMLInputElement>){
       this.setState({Equation:event.target.value});
@@ -87,7 +93,6 @@ export default class Bisection extends Equations {
   epsilonChange(event:ChangeEvent<HTMLInputElement>){
       this.setState({Epsilon:JSON.parse(event.target.value)});
   }
-
   handleSubmit(event:FormEvent<HTMLFormElement>) {
     event.preventDefault();
     let Result:any = this.calc(
@@ -110,8 +115,10 @@ export default class Bisection extends Equations {
             Error:Result.listerror[i]
           
       });
+      let Answer:Array<number> = Result.listxM[Result.listerror.length-1];
       this.setState({
         Data:row,
+        Answer:Answer,
         ApexChart: {
           Series: [
               {name: "XL", data: Result.listxL},
@@ -150,7 +157,8 @@ export default class Bisection extends Equations {
             </div>
             <br></br>
             <div>
-              <DesmosChart Equation={this.state.Equation}></DesmosChart>
+              <DesmosChart Equation={this.state.Equation} Answer={this.state.Answer}
+              xLPoint={this.state.Method.RootEquations.Bisection.xL} xRPoint={this.state.Method.RootEquations.Bisection.xR}></DesmosChart>
             </div>
             <br></br>
             <div>

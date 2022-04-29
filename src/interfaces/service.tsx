@@ -13,6 +13,7 @@ export interface PropsEquations{
     Method:Method;
     Data:Array<DataTable>;
     ApexChart:ApexChartProps;
+    Answer:Array<number>;
 };
 export interface PropsCustom{
     Epsilon:number;
@@ -43,6 +44,9 @@ export interface DataTable {
 };
 export interface DesmosProps{
     Equation?:string;
+    Answer:Array<number>;
+    xLPoint:number;
+    xRPoint:number;
 }
 export interface ApexChartProps{
     Series:Array<Series>;

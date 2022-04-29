@@ -23,7 +23,8 @@ export default class FalsePosition extends Equations {
           Error: props.Error,
           Method: props.Method,
           Data: [],
-          ApexChart: { Series: [], Categories: []}
+          ApexChart: { Series: [], Categories: []},
+          Answer:[]
         };
         this.xLChange = this.xLChange.bind(this);
         this.xRChange = this.xRChange.bind(this);
@@ -90,7 +91,6 @@ export default class FalsePosition extends Equations {
       epsilonChange(event:ChangeEvent<HTMLInputElement>){
           this.setState({Epsilon:JSON.parse(event.target.value)});
       }
-    
       handleSubmit(event:FormEvent<HTMLFormElement>) {
         event.preventDefault();
         let Result:any = this.calc(
@@ -112,8 +112,10 @@ export default class FalsePosition extends Equations {
               FxM:JSON.parse(this.function(Result.listx1[i],this.state.Equation).toFixed(6)),
               Error:Result.listerror[i] 
           });
+          let Answer:Array<number> = Result.listx1[Result.listerror.length-1];
           this.setState({
             Data:row,
+            Answer:Answer,
             ApexChart: {
               Series: [
                   {name: "XL", data: Result.listxL},
@@ -152,7 +154,8 @@ export default class FalsePosition extends Equations {
                 </div>
                 <br></br>
                 <div>
-                  <DesmosChart Equation={this.state.Equation}></DesmosChart>
+                  <DesmosChart Equation={this.state.Equation} Answer={this.state.Answer}
+                  xLPoint={this.state.Method.RootEquations.FalsePosition.xL} xRPoint={this.state.Method.RootEquations.FalsePosition.xR}></DesmosChart>
                 </div>
                 <br></br>
                 <div>
