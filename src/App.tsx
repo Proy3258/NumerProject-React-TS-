@@ -5,7 +5,9 @@ import { Home } from './pages/Home'
 import { RootOfEq } from './rootofequations/RootOfEq'
 import  Bisection from './rootofequations/Bisection'
 import FalsePosition from './rootofequations/FalsePosition';
+import Onepoint from './rootofequations/Onepoint';
 import { Method } from './interfaces/service';
+
  
 const epsilon:number = Math.pow(10,-6),
       equation:string = " ",
@@ -13,7 +15,8 @@ const epsilon:number = Math.pow(10,-6),
       method:Method={
         RootEquations:{
           Bisection:{ xL:1.75, xR:2.00 },
-          FalsePosition:{ xL:0.02, xR:0.03 }
+          FalsePosition:{ xL:0.02, xR:0.03 },
+          Onepoint:{x:0.1}
         }
           
       }
@@ -38,6 +41,13 @@ function App() {
             Equation={equation}
             Error={error}
             Method={method}/>} 
+          />
+          <Route path="/onepoint" element=
+          {<Onepoint 
+            Epsilon={epsilon}
+            Equation={equation}
+            Error={error}
+            Method={method}/>}
           />
         </Routes>
     </BrowserRouter>

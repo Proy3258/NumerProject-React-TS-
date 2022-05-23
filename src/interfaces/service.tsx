@@ -6,6 +6,9 @@ export interface FalsePosition{
     xL:number;
     xR:number;
 };
+export interface Onepoint{
+    x:number;
+}
 export interface PropsEquations{
     Epsilon:number;
     Equation:string;
@@ -25,6 +28,7 @@ export interface Method{
     RootEquations:{
         Bisection:Bisection;
         FalsePosition:FalsePosition;
+        Onepoint:Onepoint;
     }
     
 };
