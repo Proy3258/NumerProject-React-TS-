@@ -28,6 +28,39 @@ export default class Onepoint extends Equations{
         this.handleSubmit = this.handleSubmit.bind(this);
     
     }
+    calc(x:number,error:number,epsilon:number,equation:string):object{
+      let xi:number = this.function(x,equation),
+      listx: Array<number> = [],
+      listxi: Array<number> = [],
+      listerror: Array<number> = [];
+
+      //First time
+      error = this.error(xi,x);
+
+      //Begin iteration
+      while (error > epsilon && error != Infinity && listerror.length < 100) {
+          xi = this.function(x,equation);
+          error = this.error(xi,x);
+
+          //Get Data
+          this.listResult(listx,x);
+          this.listResult(listxi,xi);
+          this.listResult(listerror,error);
+          
+          x = xi;
+      }
+    
+      // Result
+      return (
+          {
+              listx:listx,
+              listxi:listxi,
+              listerror:listerror,
+              Epsilon:epsilon,
+              Equation:equation
+          }
+  );
+    }
     xChange(event:ChangeEvent<HTMLInputElement>){
         this.props.Method.RootEquations.Onepoint.x = JSON.parse(event.target.value);
         this.setState({Method: this.props.Method});
@@ -39,7 +72,36 @@ export default class Onepoint extends Equations{
       this.setState({Epsilon:JSON.parse(event.target.value)});
     }
     handleSubmit(event:FormEvent<HTMLFormElement>){
+      console.log("hello");
         event.preventDefault();
+        let Result:any = this.calc(
+            this.state.Method.RootEquations.Onepoint.x,
+            this.state.Error,
+            this.state.Epsilon,
+            this.state.Equation
+        );
+
+        let row:Array<DataTable> = [];
+        for(let i:number = 0; i<Result.listerror.length; ++i){
+            row.push({
+              xL: Result.listx[i],
+              xR: Result.listxi[i],
+              Error: Result.listerror[i]
+            });
+        }
+
+        //set state to chart and table
+        this.setState({
+            Data:row,
+            ApexChart: {
+                Series: [
+                    {name: "X", data: Result.listx},
+                    {name: "Xi", data: Result.listxi},
+                    {name: "Error", data: Result.listerror}
+                ],
+                Categories: Result.listerror.count
+            }
+        });
 
     }
     render(){
@@ -68,13 +130,42 @@ export default class Onepoint extends Equations{
             <br></br>
             <div>
               <DesmosChart Equation={this.state.Equation} Answer={this.state.Answer}
-              xLPoint={this.state.Method.RootEquations.Bisection.xL} xRPoint={this.state.Method.RootEquations.Bisection.xR}></DesmosChart>
+              xLPoint={this.state.Method.RootEquations.Onepoint.x} xRPoint={0} ></DesmosChart>
             </div>
             <br></br>
             <div>
               <ApexChart Series={this.state.ApexChart.Series} Categories={this.state.ApexChart.Categories}></ApexChart>
             </div>
             <br></br>
+            <div>
+              <TableContainer component={Paper}>
+              <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Iteration</TableCell>
+                    <TableCell align="right">x</TableCell>
+                    <TableCell align="right">xi</TableCell>
+                    <TableCell align="right">Error</TableCell>
+                  </TableRow>
+                </TableHead>
+              <TableBody>
+                {this.state.Data.map((row,index) => (
+                  <TableRow
+                    key={index}
+                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                  >
+                  <TableCell component="th" scope="row">
+                    {index}
+                  </TableCell>
+                  <TableCell align="right">{row.xL}</TableCell>
+                  <TableCell align="right">{row.xR}</TableCell>
+                  <TableCell align="right">{row.Error}</TableCell>
+              </TableRow>
+              ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+            </div>
             
         </div>
         )

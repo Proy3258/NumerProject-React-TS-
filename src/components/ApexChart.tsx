@@ -33,7 +33,7 @@ export const ApexChart:FC<ApexChartProps> = (props) => {
             curve: 'smooth'
         },
         title: {
-            text: 'Bisection Chart',
+            text: 'ApexChart',
             align: 'left'
         },
         grid: {

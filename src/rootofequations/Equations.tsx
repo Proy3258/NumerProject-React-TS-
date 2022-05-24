@@ -22,6 +22,23 @@ export default class Equations extends Component<PropsCustom,PropsEquations> {
 
     // ฟังก์ชัน คำนวณค่า Error
     error(xNew:number,xOld:number):number{
-        return JSON.parse(Math.abs((xNew-xOld)/xNew).toFixed(6));
+            if(xNew!=0){
+                return JSON.parse(Math.abs((xNew-xOld)/xNew).toFixed(6));
+            }
+            else{
+                console.log("xNew can not equal 0")
+                return -1;
+            }
+        }
+       
+
+    // ข้อมูลคำตอบแสดงเป็น array ทศนิยม 6 ตำแหน่ง
+    listResult(list:Array<number>,data:number):void{
+        if(data!=Infinity && data!=NaN){
+            list.push(JSON.parse(data.toFixed(6)));
+        }
+        else{
+            list.push(0);
+        }
     }
 }

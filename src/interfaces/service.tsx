@@ -38,13 +38,13 @@ export interface Result {
     Error:Array<number>;
 }
 export interface DataTable {
-    xL:number;
-    xR:number;
-    xM:number;
-    FxL:number;
-    FxR:number;
-    FxM:number;
-    Error:number;
+    xL?:number;
+    xR?:number;
+    xM?:number;
+    FxL?:number;
+    FxR?:number;
+    FxM?:number;
+    Error?:number;
 };
 export interface DesmosProps{
     Equation?:string;
