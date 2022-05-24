@@ -1,5 +1,5 @@
 import { Component } from 'react'
-import { parse } from 'mathjs'
+import { derivative, parse } from 'mathjs'
 
 import { PropsCustom, PropsEquations } from '../interfaces/service'
 
@@ -26,10 +26,21 @@ export default class Equations extends Component<PropsCustom,PropsEquations> {
                 return JSON.parse(Math.abs((xNew-xOld)/xNew).toFixed(6));
             }
             else{
-                console.log("xNew can not equal 0")
+                alert("xNew can not equal 0 (INFINITY)")
                 return -1;
             }
         }
+
+    Derivative(x:string,equation:string) : string{
+        try {
+            let Equation:string = derivative(equation,x).toString();
+            return Equation;
+        }
+        catch (error){
+            console.log("Equation Error: "+ error);
+        }
+        return equation ;
+    }
        
 
     // ข้อมูลคำตอบแสดงเป็น array ทศนิยม 6 ตำแหน่ง

@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
 import { NavBar } from '../components/NavBar'
 import { DataTable, PropsCustom, PropsEquations } from '../interfaces/service';
-import './css/Bisection.css'
+import './css/formrootofequation.css'
 import Equations from './Equations';
 
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
@@ -46,11 +46,8 @@ export default class Bisection extends Equations {
     // คำนวณค่า Error
     error = (this.function(xL, equation) * this.function(xR, equation)) ? this.error(xM, xL) : this.error(xM, xR);
 
-    // if(error == Infinity){
-    //   console.log(error);
-    // }
     // loop คำนวณ bisection
-    while(error > epsilon){
+    while(error > epsilon && error != Infinity && listerror.length < 100){
       xM = this.calcXm(xL,xR);
       listxL.push(JSON.parse(xL.toFixed(6)));
       listxR.push(JSON.parse(xR.toFixed(6)));
@@ -135,10 +132,10 @@ export default class Bisection extends Equations {
      return (
           <div>
             <NavBar />
-            <div className="headbisection">
+            <div className="headequation">
               <h1>BISECTION</h1>
             </div>
-            <div className="headbisection">
+            <div className="headequation">
               <form onSubmit={this.handleSubmit}>
                 <div className="myform">
                   <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>

@@ -1,7 +1,7 @@
 import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
 import { NavBar } from '../components/NavBar'
 import { DataTable, PropsCustom, PropsEquations } from '../interfaces/service';
-import './css/FalsePosition.css'
+import './css/formrootofequation.css'
 import Equations from './Equations';
 
 
@@ -50,7 +50,7 @@ export default class FalsePosition extends Equations {
         error = (this.function(xL, equation) * this.function(xR, equation)) ? this.error(x1, xL) : this.error(x1, xR);
     
         // loop คำนวณ falseposition
-        while(error > epsilon){
+        while(error > epsilon && error != Infinity && listerror.length < 100){
           x1 = this.calcX1(xL,xR,equation);
           listxL.push(JSON.parse(xL.toFixed(6)));
           listxR.push(JSON.parse(xR.toFixed(6)));
@@ -132,10 +132,10 @@ export default class FalsePosition extends Equations {
          return (
               <div>
                 <NavBar />
-                <div className="headfalseposition">
+                <div className="headequation">
                   <h1>FALSE POSITION</h1>
                 </div>
-                <div className="headfalseposition">
+                <div className="headequation">
                   <form onSubmit={this.handleSubmit}>
                     <div className="myform">
                       <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>

@@ -9,6 +9,15 @@ export interface FalsePosition{
 export interface Onepoint{
     x:number;
 }
+
+export interface Newton{
+    x:number;
+}
+
+export interface Secant{
+    x:number;
+    xi:number;
+}
 export interface PropsEquations{
     Epsilon:number;
     Equation:string;
@@ -29,6 +38,8 @@ export interface Method{
         Bisection:Bisection;
         FalsePosition:FalsePosition;
         Onepoint:Onepoint;
+        Newton:Newton;
+        Secant:Secant;
     }
     
 };

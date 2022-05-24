@@ -3,10 +3,12 @@ import './App.css';
 
 import { Home } from './pages/Home'
 import { RootOfEq } from './rootofequations/RootOfEq'
+import { Method } from './interfaces/service';
 import  Bisection from './rootofequations/Bisection'
 import FalsePosition from './rootofequations/FalsePosition';
 import Onepoint from './rootofequations/Onepoint';
-import { Method } from './interfaces/service';
+import Newtonraphson from './rootofequations/Newtonraphson';
+import Secant from './rootofequations/Secant';
 
  
 const epsilon:number = Math.pow(10,-6),
@@ -16,7 +18,9 @@ const epsilon:number = Math.pow(10,-6),
         RootEquations:{
           Bisection:{ xL:1.75, xR:2.00 },
           FalsePosition:{ xL:0.02, xR:0.03 },
-          Onepoint:{x:0.1}
+          Onepoint:{x:0.1},
+          Newton:{x:2.00},
+          Secant:{x:2.00, xi:2.75 }
         }
           
       }
@@ -44,6 +48,20 @@ function App() {
           />
           <Route path="/onepoint" element=
           {<Onepoint 
+            Epsilon={epsilon}
+            Equation={equation}
+            Error={error}
+            Method={method}/>}
+          />
+          <Route path="/newtonraphson" element=
+          {<Newtonraphson 
+            Epsilon={epsilon}
+            Equation={equation}
+            Error={error}
+            Method={method}/>}
+          />
+          <Route path="/secant" element=
+          {<Secant
             Epsilon={epsilon}
             Equation={equation}
             Error={error}
