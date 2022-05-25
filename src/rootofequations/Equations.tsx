@@ -1,11 +1,11 @@
 import { Component } from 'react'
 import { derivative, parse } from 'mathjs'
 
-import { PropsCustom, PropsEquations } from '../interfaces/service'
+import { PropNumerical, PropsStateMethods } from '../interfaces/service'
 
 
-export default class Equations extends Component<PropsCustom,PropsEquations> {
-    constructor(props:PropsCustom){
+export default class Equations extends Component<PropNumerical,PropsStateMethods> {
+    constructor(props:PropNumerical){
         super(props);
     }
     // ฟังก์ชัน F(x)

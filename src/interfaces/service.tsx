@@ -18,28 +18,44 @@ export interface Secant{
     x:number;
     xi:number;
 }
+
+
 export interface PropsEquations{
     Epsilon:number;
     Equation:string;
     Error:number;
     Method:Method;
-    Data:Array<DataTable>;
-    ApexChart:ApexChartProps;
     Answer:Array<number>;
+    Token:string;
+    Url:string;
+    Problem:Array<PropsProblem>;
 };
+
+export interface PropNumerical{
+    StateEquation:PropsEquations;
+}
+export interface PropsStateMethods{
+    StateEquation:PropsEquations;
+    ApexChart:ApexChartProps;
+    Data:Array<DataTable>;
+}
 export interface PropsCustom{
     Epsilon:number;
     Equation:string;
     Error:number;
     Method:Method;
 };
+export interface PropsProblem {
+    Bisection:Array<{Equation:string}>
+    FalsePosition:Array<object>
+}
 export interface Method{
     RootEquations:{
         Bisection:Bisection;
         FalsePosition:FalsePosition;
         Onepoint:Onepoint;
-        Newton:Newton;
-        Secant:Secant;
+        // Newton:Newton;
+        // Secant:Secant;
     }
     
 };

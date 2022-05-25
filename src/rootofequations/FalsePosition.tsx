@@ -1,30 +1,27 @@
 import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
 import { NavBar } from '../components/NavBar'
-import { DataTable, PropsCustom, PropsEquations } from '../interfaces/service';
+import { DataTable, PropNumerical} from '../interfaces/service';
 import './css/formrootofequation.css'
 import Equations from './Equations';
 
 
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
-    TableHead, TableRow, Paper} from '@mui/material';
+    TableHead, TableRow, Paper, Autocomplete} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
 import { DesmosChart } from '../components/DesmosChart';
 import { ApexChart } from '../components/ApexChart';
+import axios from 'axios';
 
 
 
 export default class FalsePosition extends Equations {
     
-    constructor(props:PropsCustom){
+    constructor(props:PropNumerical){
         super(props);
         this.state = {
-          Epsilon: props.Epsilon,
-          Equation: props.Equation,
-          Error: props.Error,
-          Method: props.Method,
+          StateEquation: props.StateEquation,
           Data: [],
-          ApexChart: { Series: [], Categories: []},
-          Answer:[]
+          ApexChart: {Series: [], Categories: []}
         };
         this.xLChange = this.xLChange.bind(this);
         this.xRChange = this.xRChange.bind(this);
@@ -78,28 +75,30 @@ export default class FalsePosition extends Equations {
     
       //เก็บ value ลง Method falseposition
       xLChange(event:ChangeEvent<HTMLInputElement>){
-        this.props.Method.RootEquations.FalsePosition.xL = JSON.parse(event.target.value);
-        this.setState({Method: this.props.Method});
+        this.props.StateEquation.Method.RootEquations.FalsePosition.xL = JSON.parse(event.target.value);
+        this.setState({StateEquation: this.props.StateEquation});
       }
       xRChange(event:ChangeEvent<HTMLInputElement>){
-          this.props.Method.RootEquations.FalsePosition.xR = JSON.parse(event.target.value);
-          this.setState({Method: this.props.Method});
+          this.props.StateEquation.Method.RootEquations.FalsePosition.xR = JSON.parse(event.target.value);
+          this.setState({StateEquation: this.props.StateEquation});
       }
-      equationChange(event:ChangeEvent<HTMLInputElement>){
-          this.setState({Equation:event.target.value});
+      equationChange(event:any,value:string){
+        this.props.StateEquation.Equation = value;
+        this.setState({ StateEquation:this.props.StateEquation });
       }
       epsilonChange(event:ChangeEvent<HTMLInputElement>){
-          this.setState({Epsilon:JSON.parse(event.target.value)});
+          this.setState({StateEquation:JSON.parse(event.target.value)});
       }
       handleSubmit(event:FormEvent<HTMLFormElement>) {
         event.preventDefault();
         let Result:any = this.calc(
-          this.state.Method.RootEquations.FalsePosition.xL,
-          this.state.Method.RootEquations.FalsePosition.xR,
-          this.state.Error,
-          this.state.Epsilon,
-          this.state.Equation
+          this.state.StateEquation.Method.RootEquations.FalsePosition.xL,
+          this.state.StateEquation.Method.RootEquations.FalsePosition.xR,
+          this.state.StateEquation.Error,
+          this.state.StateEquation.Epsilon,
+          this.state.StateEquation.Equation
       );
+      
       //loop แสดงค่าแต่ละตัวแปร ลงใน row แล้วนำไปแสดงใน DataTable
       let row:Array<DataTable> = []
       for(let i:number = 0 ; i<Result.listerror.length ; ++i){
@@ -107,15 +106,14 @@ export default class FalsePosition extends Equations {
               xL:Result.listxL[i],
               xR:Result.listxR[i],
               xM:Result.listx1[i],
-              FxL:JSON.parse(this.function(Result.listxL[i],this.state.Equation).toFixed(6)),
-              FxR:JSON.parse(this.function(Result.listxR[i],this.state.Equation).toFixed(6)),
-              FxM:JSON.parse(this.function(Result.listx1[i],this.state.Equation).toFixed(6)),
+              FxL:JSON.parse(this.function(Result.listxL[i],this.state.StateEquation.Equation).toFixed(6)),
+              FxR:JSON.parse(this.function(Result.listxR[i],this.state.StateEquation.Equation).toFixed(6)),
+              FxM:JSON.parse(this.function(Result.listx1[i],this.state.StateEquation.Equation).toFixed(6)),
               Error:Result.listerror[i] 
           });
           let Answer:Array<number> = Result.listx1[Result.listerror.length-1];
           this.setState({
             Data:row,
-            Answer:Answer,
             ApexChart: {
               Series: [
                   {name: "XL", data: Result.listxL},
@@ -128,7 +126,19 @@ export default class FalsePosition extends Equations {
         })
         }
       }
+      componentDidMount() {
+        const api = this.props.StateEquation.Url;
+        axios.get(api, { headers: {"Authorization" : `Bearer ${this.props.StateEquation.Token}`} })
+            .then(res => {
+                console.log(this.props.StateEquation);
+                console.log(this.props.StateEquation.Url);
+                console.log(this.props.StateEquation.Token);
+                this.state.StateEquation.Problem = res.data.Chapter[1].FalsePosition;
+                this.setState({StateEquation:this.props.StateEquation})
+            });
+      }
       render(){
+        const options:any= this.state.StateEquation.Problem;
          return (
               <div>
                 <NavBar />
@@ -138,10 +148,21 @@ export default class FalsePosition extends Equations {
                 <div className="headequation">
                   <form onSubmit={this.handleSubmit}>
                     <div className="myform">
-                      <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>
-                      <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} value={this.state.Method.RootEquations.FalsePosition.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
-                      <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} defaultValue={this.state.Method.RootEquations.FalsePosition.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
-                      <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
+                    <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            options={options}
+                            getOptionLabel={(option)=>option.Equation}
+                            value={{
+                                Equation:this.state.StateEquation.Equation
+                            }}
+                            onInputChange={this.equationChange}
+                            renderInput={(params) => <TextField {...params} label="Equation" />}
+                        />
+                      {/* <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/> */}
+                      <TextField id="demo-helper-text-misaligned" label="XL" type={"number"} defaultValue={this.state.StateEquation.Method.RootEquations.FalsePosition.xL} inputProps={{step: Math.pow(10,-6)}} onChange={this.xLChange}/>
+                      <TextField id="demo-helper-text-misaligned" label="XR" type={"number"} defaultValue={this.state.StateEquation.Method.RootEquations.FalsePosition.xR} inputProps={{step: Math.pow(10,-6)}} onChange={this.xRChange}/>
+                      <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.StateEquation.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                     </div>
                     <div>
                       <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>
@@ -150,12 +171,12 @@ export default class FalsePosition extends Equations {
                 </div>
                 <br></br>
                 <div className="setequation">
-                  Equation : <Tex2SVG display="inline" latex={this.state.Equation} />
+                  Equation : <Tex2SVG display="inline" latex={this.state.StateEquation.Equation} />
                 </div>
                 <br></br>
                 <div>
-                  <DesmosChart Equation={this.state.Equation} Answer={this.state.Answer}
-                  xLPoint={this.state.Method.RootEquations.FalsePosition.xL} xRPoint={this.state.Method.RootEquations.FalsePosition.xR}></DesmosChart>
+                  <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.StateEquation.Answer}
+                  xLPoint={this.state.StateEquation.Method.RootEquations.FalsePosition.xL} xRPoint={this.state.StateEquation.Method.RootEquations.FalsePosition.xR}></DesmosChart>
                 </div>
                 <br></br>
                 <div>

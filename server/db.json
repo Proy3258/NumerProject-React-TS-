@@ -1,0 +1,100 @@
+{
+  "users": [
+    {
+      "email": "proy3258@gmail.com",
+      "password": "$2a$10$kfAg2tCTp/uJsKXYEDoVjOtck8rk2fLF5o267mTDGig/qiEmjGFAu",
+      "id": 1
+    },
+    {
+      "email": "proy1234@gmail.com",
+      "password": "$2a$10$h6m0oNUzB2qG1erO5yVrveHBEP35CkQ2XoQA2pm5Di7PNJZFy9umq",
+      "id": 2
+    },
+    {
+      "email": "proy12345@gmail.com",
+      "password": "$2a$10$SOKMXNMAd9P49.y41HuAueYI2PulB2F7ey/1cXkPZuc8tt9SA0/bS",
+      "id": 3
+    },
+    {
+      "email": "proy12346@gmail.com",
+      "password": "$2a$10$wEuAkz3xRu93W6ECGMCqneGxEZJ/pwG7P4JVXzOVDlgl62RcRP5tG",
+      "id": 4
+    },
+    {
+      "email": "proy123asda@gmail.com",
+      "password": "$2a$10$TzCI4V7vFop18y7oTGfMXuxji1VZrq5M1BEAp/NQW3D2tm9MTszB2",
+      "id": 5
+    },
+    {
+      "email": "proy123aa@gmail.com",
+      "password": "$2a$10$JI3lVPsoofc1WcnuJLUexuJ0N2.d7mRgoxeOyKsJ79AmqsYUWtC.6",
+      "id": 6
+    }
+  ],
+  "NumericalMethod": {
+    "Chapter": [
+      {
+        "Bisection": [
+          {
+            "xL": 1.75,
+            "xR": 2,
+            "Equation": "x^4-13"
+          },
+          {
+            "xL": 0,
+            "xR": 4,
+            "Equation": "x^2-5"
+          },
+          {
+            "xL": 1,
+            "xR": 4,
+            "Equation": "x^2+2x-8"
+          }
+        ]
+      },
+      {
+        "FalsePosition": [
+          {
+            "xL": 0.02,
+            "xR": 0.03,
+            "Equation": "43x-1"
+          },
+          {
+            "xL": 1,
+            "xR": 2,
+            "Equation": "x^2-3"
+          }
+        ]
+      },
+      {
+        "OnePoint": [
+          {
+            "x": 1,
+            "Equation": "((x^2)-5)/4"
+          },
+          {
+            "x": 0,
+            "Equation": "(x+1)/3"
+          }
+        ]
+      },
+      {
+        "NewtonRaphson": [
+          {
+            "x": 2,
+            "Equation": "x^2-7"
+          }
+        ]
+      },
+      {
+        "Secant": [
+          {
+            "x": 2,
+            "xi": 2.75,
+            "Equation": "x^2-7"
+          }
+        ]
+      }
+    ]
+  }
+}

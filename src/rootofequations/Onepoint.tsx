@@ -1,28 +1,26 @@
 import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
 import { NavBar } from '../components/NavBar'
-import { DataTable, PropsCustom, PropsEquations } from '../interfaces/service';
+import { DataTable, PropNumerical, PropsEquations } from '../interfaces/service';
 import './css/formrootofequation.css'
 import Equations from './Equations';
 
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
-  TableHead, TableRow, Paper} from '@mui/material';
+  TableHead, TableRow, Paper, Autocomplete} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
 import { DesmosChart } from '../components/DesmosChart';
 import { ApexChart } from '../components/ApexChart';
+import axios from 'axios';
 
 export default class Onepoint extends Equations{
     
-    constructor(props:PropsCustom){
+    constructor(props:PropNumerical){
         super(props);
         this.state = {
-            Epsilon: props.Epsilon,
-            Equation: props.Equation,
-            Error: props.Error,
-            Method: props.Method,
-            Data: [],
-            ApexChart: {Series: [], Categories: []},
-            Answer: []
+          StateEquation: props.StateEquation,
+          Data: [],
+          ApexChart: {Series: [], Categories: []}
         };
+        this.setState({StateEquation:props.StateEquation});
         this.xChange = this.xChange.bind(this);
         this.equationChange = this.equationChange.bind(this);
         this.epsilonChange = this.epsilonChange.bind(this);
@@ -63,23 +61,25 @@ export default class Onepoint extends Equations{
   );
     }
     xChange(event:ChangeEvent<HTMLInputElement>){
-        this.props.Method.RootEquations.Onepoint.x = JSON.parse(event.target.value);
-        this.setState({Method: this.props.Method});
+        this.state.StateEquation.Method.RootEquations.Onepoint.x = JSON.parse(event.target.value);
+        this.setState({StateEquation: this.props.StateEquation});
+        console.log(this.setState({StateEquation: this.props.StateEquation}));
     }
-    equationChange(event:ChangeEvent<HTMLInputElement>){
-      this.setState({Equation:event.target.value});
+    equationChange(event:any,value:string){
+      this.props.StateEquation.Equation = value;
+      this.setState({ StateEquation:this.props.StateEquation });
     }
     epsilonChange(event:ChangeEvent<HTMLInputElement>){
-      this.setState({Epsilon:JSON.parse(event.target.value)});
+      this.setState({StateEquation:JSON.parse(event.target.value)});
     }
     handleSubmit(event:FormEvent<HTMLFormElement>){
       console.log("hello");
         event.preventDefault();
         let Result:any = this.calc(
-            this.state.Method.RootEquations.Onepoint.x,
-            this.state.Error,
-            this.state.Epsilon,
-            this.state.Equation
+            this.state.StateEquation.Method.RootEquations.Onepoint.x,
+            this.state.StateEquation.Error,
+            this.state.StateEquation.Epsilon,
+            this.state.StateEquation.Equation
         );
 
         let row:Array<DataTable> = [];
@@ -96,8 +96,8 @@ export default class Onepoint extends Equations{
             Data:row,
             ApexChart: {
                 Series: [
-                    {name: "X", data: Result.listx},
-                    {name: "Xi", data: Result.listxi},
+                    {name: "x", data: Result.listx},
+                    {name: "xi", data: Result.listxi},
                     {name: "Error", data: Result.listerror}
                 ],
                 Categories: Result.listerror.count
@@ -105,7 +105,21 @@ export default class Onepoint extends Equations{
         });
 
     }
+    async componentDidMount() {
+      const api = this.props.StateEquation.Url;
+      await axios.get(api, { headers: {"Authorization" : `Bearer ${this.props.StateEquation.Token}`} })
+          .then(res => {
+              console.log("data:",res.data.Chapter);
+              console.log(this.props.StateEquation.Url);
+              console.log(this.props.StateEquation.Token);
+              console.log(res.data.Chapter[2].Onepoint);
+              this.state.StateEquation.Problem = res.data.Chapter[2].OnePoint;
+              this.setState({StateEquation:this.props.StateEquation})
+          });
+    }
     render(){
+      const options:any = this.props.StateEquation.Problem;
+        console.log("options:" , options);
         return(
             <div>
             <NavBar />
@@ -115,9 +129,22 @@ export default class Onepoint extends Equations{
             <div className="headequation">
               <form onSubmit={this.handleSubmit}>
                 <div className="myform">
-                  <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="X" type={"number"} defaultValue={this.state.Method.RootEquations.Onepoint.x} inputProps={{step: Math.pow(10,-6)}} onChange={this.xChange}/>
-                  <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
+                    <Autocomplete
+                            disablePortal
+                            id="combo-box-demo"
+                            options={options}
+                            getOptionLabel={(option)=>option.Equation}
+                            value={{
+                                Equation:this.state.StateEquation.Equation,
+                            }}
+                            onInputChange={this.equationChange}
+                            renderInput={(params) => <TextField {...params} label="Equation" />}
+                            
+                        />
+                  {/* <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/> */}
+  
+                  <TextField id="demo-helper-text-misaligned" label="X" type={"number"}defaultValue={this.props.StateEquation.Method.RootEquations.Onepoint.x} inputProps={{step: Math.pow(10,-6)}} onChange={this.xChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.StateEquation.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                 </div>
                 <div>
                   <Button variant="outlined" color="secondary" type={"submit"}>Submit</Button>
@@ -126,12 +153,12 @@ export default class Onepoint extends Equations{
             </div>
             <br></br>
             <div className="setequation">
-                  Equation : <Tex2SVG display="inline" latex={this.state.Equation} />
+                  Equation : <Tex2SVG display="inline" latex={this.state.StateEquation.Equation} />
             </div>
             <br></br>
             <div>
-              <DesmosChart Equation={this.state.Equation} Answer={this.state.Answer}
-              xLPoint={this.state.Method.RootEquations.Onepoint.x} xRPoint={0} ></DesmosChart>
+              <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.StateEquation.Answer}
+              xLPoint={this.state.StateEquation.Method.RootEquations.Onepoint.x} xRPoint={0} ></DesmosChart>
             </div>
             <br></br>
             <div>
