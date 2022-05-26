@@ -73,7 +73,7 @@ export default class Onepoint extends Equations{
       this.setState({StateEquation:JSON.parse(event.target.value)});
     }
     handleSubmit(event:FormEvent<HTMLFormElement>){
-      console.log("hello");
+      // console.log("hello");
         event.preventDefault();
         let Result:any = this.calc(
             this.state.StateEquation.Method.RootEquations.Onepoint.x,
@@ -143,7 +143,7 @@ export default class Onepoint extends Equations{
                         />
                   {/* <TextField id="demo-helper-text-misaligned" label="Equation" type={"text"} onChange={this.equationChange}/> */}
   
-                  <TextField id="demo-helper-text-misaligned" label="X" type={"number"}defaultValue={this.props.StateEquation.Method.RootEquations.Onepoint.x} inputProps={{step: Math.pow(10,-6)}} onChange={this.xChange}/>
+                  <TextField id="demo-helper-text-misaligned" label="X" type={"number"}defaultValue={this.state.StateEquation.Method.RootEquations.Onepoint.x} inputProps={{step: Math.pow(10,-6)}} onChange={this.xChange}/>
                   <TextField id="demo-helper-text-misaligned" label="Epsilon" type={"number"} defaultValue={this.state.StateEquation.Error} inputProps={{step: Math.pow(10,-6)}} onChange={this.epsilonChange}/>
                 </div>
                 <div>

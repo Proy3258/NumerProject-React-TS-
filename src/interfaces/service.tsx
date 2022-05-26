@@ -54,8 +54,8 @@ export interface Method{
         Bisection:Bisection;
         FalsePosition:FalsePosition;
         Onepoint:Onepoint;
-        // Newton:Newton;
-        // Secant:Secant;
+        Newton:Newton;
+        Secant:Secant;
     }
     
 };
