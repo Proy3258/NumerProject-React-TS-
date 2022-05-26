@@ -25,7 +25,6 @@ export interface PropsEquations{
     Equation:string;
     Error:number;
     Method:Method;
-    Answer:Array<number>;
     Token:string;
     Url:string;
     Problem:Array<PropsProblem>;
@@ -38,13 +37,9 @@ export interface PropsStateMethods{
     StateEquation:PropsEquations;
     ApexChart:ApexChartProps;
     Data:Array<DataTable>;
+    Answer:Array<number>;
 }
-export interface PropsCustom{
-    Epsilon:number;
-    Equation:string;
-    Error:number;
-    Method:Method;
-};
+
 export interface PropsProblem {
     Bisection:Array<{Equation:string}>
     FalsePosition:Array<object>
@@ -76,8 +71,10 @@ export interface DataTable {
 export interface DesmosProps{
     Equation?:string;
     Answer:Array<number>;
-    xLPoint:number;
-    xRPoint:number;
+    xLPoint?:number;
+    xRPoint?:number;
+    xPoint?:number;
+    xiPoint?:number;
 }
 export interface ApexChartProps{
     Series:Array<Series>;

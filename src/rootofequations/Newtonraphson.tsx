@@ -18,7 +18,8 @@ export default class Newtonraphson extends Equations{
     this.state = {
       StateEquation: props.StateEquation,
       Data: [],
-      ApexChart: {Series: [], Categories: []}
+      ApexChart: {Series: [], Categories: []},
+      Answer:[]
     };
     this.xChange = this.xChange.bind(this);
     this.equationChange = this.equationChange.bind(this);
@@ -87,10 +88,11 @@ export default class Newtonraphson extends Equations{
                 Error:Result.listerror[i]
             });
         }
-      
+        let Answer:Array<number> = Result.listxi[Result.listerror.length-1];
         //set state to chart and table
         this.setState({
             Data:row,
+            Answer:Answer,
             ApexChart: {
                 Series: [
                     {name: "X", data: Result.listx},
@@ -151,8 +153,8 @@ export default class Newtonraphson extends Equations{
             </div>
             <br></br>
             <div>
-              <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.StateEquation.Answer}
-              xLPoint={this.state.StateEquation.Method.RootEquations.Onepoint.x} xRPoint={0} ></DesmosChart>
+              <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.Answer}
+              xPoint={this.state.StateEquation.Method.RootEquations.Onepoint.x}></DesmosChart>
             </div>
             <br></br>
             <div>

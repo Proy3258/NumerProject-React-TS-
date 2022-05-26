@@ -19,7 +19,8 @@ export default class Bisection extends Equations {
     this.state = {
       StateEquation: props.StateEquation,
       Data: [],
-      ApexChart: {Series: [], Categories: []}
+      ApexChart: {Series: [], Categories: []},
+      Answer:[]
     };
     this.xLChange = this.xLChange.bind(this);
     this.xRChange = this.xRChange.bind(this);
@@ -113,6 +114,7 @@ export default class Bisection extends Equations {
       let Answer:Array<number> = Result.listxM[Result.listerror.length-1];
       this.setState({
         Data:row,
+        Answer:Answer,
         ApexChart: {
           Series: [
               {name: "XL", data: Result.listxL},
@@ -174,7 +176,7 @@ export default class Bisection extends Equations {
             </div>
             <br></br>
             <div>
-              <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.StateEquation.Answer}
+              <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.Answer}
               xLPoint={this.state.StateEquation.Method.RootEquations.Bisection.xL} xRPoint={this.state.StateEquation.Method.RootEquations.Bisection.xR}></DesmosChart>
             </div>
             <br></br>

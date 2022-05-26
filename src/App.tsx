@@ -25,8 +25,7 @@ function App() {
         Secant:{x:2.00, xi:2.75 }
       }
     },
-    Answer: [],
-    Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb3kxMjNhYUBnbWFpbC5jb20iLCJpYXQiOjE2NTM1NTI4NzcsImV4cCI6MTY1MzU1NjQ3Nywic3ViIjoiNiJ9.8HZ9zInbDkVDgfCDAxNQouovSrNUbIpNu2Sa655JvkE',
+    Token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb3kxMjNhYUBnbWFpbC5jb20iLCJpYXQiOjE2NTM1NTkxMjUsImV4cCI6MTY1MzU2MjcyNSwic3ViIjoiNiJ9.AeFfirLj4BL12OtINJ66wlO38A4mi-c2fHwzCEaS6vA',
     Url: 'http://localhost:7800/NumericalMethod',
     Problem: []
   };
