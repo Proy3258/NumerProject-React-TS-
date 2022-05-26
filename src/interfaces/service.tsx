@@ -19,7 +19,6 @@ export interface Secant{
     xi:number;
 }
 
-
 export interface PropsEquations{
     Epsilon:number;
     Equation:string;
@@ -77,10 +76,6 @@ export interface DesmosProps{
     xiPoint?:number;
 }
 export interface ApexChartProps{
-    Series:Array<Series>;
-    Categories:Array<number>;
-}
-export interface Series{
-    name:string;
-    data:Array<number>;
+    Series:Array<any>;
+    Categories:Array<object>;
 }

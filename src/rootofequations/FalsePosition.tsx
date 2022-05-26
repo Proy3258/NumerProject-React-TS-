@@ -1,16 +1,14 @@
-import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
+import React, {ChangeEvent, FormEvent } from 'react'
 import { NavBar } from '../components/NavBar'
 import { DataTable, PropNumerical} from '../interfaces/service';
 import './css/formrootofequation.css'
 import Equations from './Equations';
 
-
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
     TableHead, TableRow, Paper, Autocomplete} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
-import { DesmosChart } from '../components/DesmosChart';
-import { ApexChart } from '../components/ApexChart';
 import axios from 'axios';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 
 
@@ -112,18 +110,32 @@ export default class FalsePosition extends Equations {
               FxM:JSON.parse(this.function(Result.listx1[i],this.state.StateEquation.Equation).toFixed(6)),
               Error:Result.listerror[i] 
           });
+          let reChart = [];
+          for(let i:number = 0 ; i<Result.listerror.length ; ++i){
+            reChart.push({
+                xL:Result.listxL[i],
+                xR:Result.listxR[i],
+                xM:Result.listx1[i],
+                FxL:JSON.parse(this.function(Result.listxL[i],this.state.StateEquation.Equation).toFixed(6)),
+                FxR:JSON.parse(this.function(Result.listxR[i],this.state.StateEquation.Equation).toFixed(6)),
+                FxM:JSON.parse(this.function(Result.listx1[i],this.state.StateEquation.Equation).toFixed(6)),
+                Error:Result.listerror[i]
+
+            });
+          }
+
           let Answer:Array<number> = Result.listx1[Result.listerror.length-1];
           this.setState({
             Data:row,
             Answer:Answer,
             ApexChart: {
-              Series: [
+            Series: reChart,
+            Categories: [
                   {name: "XL", data: Result.listxL},
                   {name: "XR", data: Result.listxR},
                   {name: "X1", data: Result.listx1},
                   {name: "Error", data: Result.listerror}
               ],
-              Categories: Result.listerror.count
           }
         })
         }
@@ -175,14 +187,29 @@ export default class FalsePosition extends Equations {
                 <div className="setequation">
                   Equation : <Tex2SVG display="inline" latex={this.state.StateEquation.Equation} />
                 </div>
-                <br></br>
-                <div>
-                  <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.Answer}
-                  xLPoint={this.state.StateEquation.Method.RootEquations.FalsePosition.xL} xRPoint={this.state.StateEquation.Method.RootEquations.FalsePosition.xR}></DesmosChart>
+                <div className="setequation">
+                  Answer : {this.state.Answer}
                 </div>
                 <br></br>
-                <div>
-                <ApexChart Series={this.state.ApexChart.Series} Categories={this.state.ApexChart.Categories}></ApexChart>
+                <div className="Chart-Field">
+                {/* <ApexChart Series={this.state.ApexChart.Series} Categories={this.state.ApexChart.Categories}></ApexChart> */}
+                  <ResponsiveContainer width="100%" height="100%">
+                          <LineChart
+                              width={500}
+                              height={300}
+                              data={this.state.ApexChart.Series}
+                          >
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="name" />
+                              <YAxis />
+                              <Tooltip />
+                              <Legend />
+                              <Line type="monotone" dataKey="xL" stroke="#8884d8"/>
+                              <Line type="monotone" dataKey="xR" stroke="#82ca9d" />
+                              <Line type="monotone" dataKey="xM" stroke="#8884d8"/>
+                              <Line type="monotone" dataKey="Error" stroke="#82ca9d" />
+                          </LineChart>
+                  </ResponsiveContainer>
                 </div>
                 <br></br>
                 <div>

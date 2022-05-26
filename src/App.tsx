@@ -9,7 +9,7 @@ import FalsePosition from './rootofequations/FalsePosition';
 import Onepoint from './rootofequations/Onepoint';
 import Newtonraphson from './rootofequations/Newtonraphson';
 import Secant from './rootofequations/Secant';
-import { useEffect, useState } from 'react';
+
 
 function App() {
   let StateEquation:PropsEquations = {

@@ -1,15 +1,14 @@
-import React, {ChangeEvent, FormEvent, FunctionComponent} from 'react'
+import React, {ChangeEvent, FormEvent } from 'react'
 import { NavBar } from '../components/NavBar'
-import { DataTable, PropNumerical, PropsEquations } from '../interfaces/service';
+import { DataTable, PropNumerical } from '../interfaces/service';
 import './css/formrootofequation.css'
 import Equations from './Equations';
 
 import {TextField, Button, Table, TableBody, TableCell, TableContainer,
   TableHead, TableRow, Paper, Autocomplete} from '@mui/material';
 import Tex2SVG from "react-hook-mathjax";
-import { DesmosChart } from '../components/DesmosChart';
-import { ApexChart } from '../components/ApexChart';
 import axios from 'axios';
+import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 export default class Newtonraphson extends Equations{
 
@@ -88,18 +87,27 @@ export default class Newtonraphson extends Equations{
                 Error:Result.listerror[i]
             });
         }
+
+        let reChart = [];
+        for(let i:number = 0 ; i<Result.listerror.length ; ++i){
+          reChart.push({
+            xL:Result.listx[i],
+            xR:Result.listxi[i],
+            Error:Result.listerror[i]
+          });
+        }
         let Answer:Array<number> = Result.listxi[Result.listerror.length-1];
         //set state to chart and table
         this.setState({
             Data:row,
             Answer:Answer,
             ApexChart: {
-                Series: [
+              Series: reChart,
+              Categories: [
                     {name: "X", data: Result.listx},
                     {name: "Xi", data: Result.listxi},
                     {name: "Error", data: Result.listerror}
-                ],
-                Categories: Result.listerror.count
+                ]
             }
         });
     }
@@ -151,15 +159,29 @@ export default class Newtonraphson extends Equations{
             <div className="setequation">
                   Equation : <Tex2SVG display="inline" latex={this.state.StateEquation.Equation} />
             </div>
+            <div className="setequation">
+                  Answer : {this.state.Answer}
+                </div>
             <br></br>
-            <div>
-              <DesmosChart Equation={this.state.StateEquation.Equation} Answer={this.state.Answer}
-              xPoint={this.state.StateEquation.Method.RootEquations.Onepoint.x}></DesmosChart>
-            </div>
-            <br></br>
-            <div>
-              <ApexChart Series={this.state.ApexChart.Series} Categories={this.state.ApexChart.Categories}></ApexChart>
-            </div>
+            <div className="Chart-Field">
+                {/* <ApexChart Series={this.state.ApexChart.Series} Categories={this.state.ApexChart.Categories}></ApexChart> */}
+                  <ResponsiveContainer width="100%" height="100%">
+                          <LineChart
+                              width={500}
+                              height={300}
+                              data={this.state.ApexChart.Series}
+                          >
+                              <CartesianGrid strokeDasharray="3 3" />
+                              <XAxis dataKey="name" />
+                              <YAxis />
+                              <Tooltip />
+                              <Legend />
+                              <Line type="monotone" dataKey="xL" stroke="#8884d8"/>
+                              <Line type="monotone" dataKey="xR" stroke="#82ca9d" />
+                              <Line type="monotone" dataKey="Error" stroke="#82ca9d" />
+                          </LineChart>
+                  </ResponsiveContainer>
+                </div>
             <br></br>
             <div>
               <TableContainer component={Paper}>
