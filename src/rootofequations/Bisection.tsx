@@ -1,4 +1,4 @@
-import React, {ChangeEvent, FormEvent} from 'react'
+import React, {ChangeEvent, Component, FormEvent} from 'react'
 import { NavBar } from '../components/NavBar'
 import { DataTable, PropNumerical } from '../interfaces/service';
 import './css/formrootofequation.css'
@@ -11,7 +11,7 @@ import axios from 'axios';
 import { CartesianGrid, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
 
 
-export default class Bisection extends Equations {
+export default class Bisection extends Equations implements Component {
 
   constructor(props:PropNumerical){
     super(props);

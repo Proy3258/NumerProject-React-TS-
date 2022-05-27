@@ -14,7 +14,7 @@ import Secant from './rootofequations/Secant';
 function App() {
   let StateEquation:PropsEquations = {
     Epsilon: Math.pow(10, -6),
-    Equation: " ",
+    Equation: "x",
     Error: 0.000001,
     Method: {
       RootEquations: {
